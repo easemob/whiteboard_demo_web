@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <title>Document1</title>
+    <style type='text/css'>
+        * { margin: 0; padding: 0; }
+
+        html, body { height: 100%; }
+
+        .flex { display: flex; }
+
+        .flex-row { flex-direction: row; justify-content: space-around; align-items: center; }
+
+        .flex-column { flex-direction: column; justify-content: flex-start; align-items: center; }
+
+        body { overflow: auto; background: #fff; }
+
+        .title { width: 920px; padding: 30px; align-items: flex-end; }
+
+        .title h1 { padding-bottom: 20px; font-size: 38px; color: #ffffff; text-shadow: 0 1px 3px #222222; }
+
+        .title p { font-size: 18px; color: #f5f5f5; text-shadow: 0 1px 3px #565656; }
+
+        .wrap { width: 1220px; }
+
+        .wrap .reference { position: relative; padding: 10px; background-color: rgba(255, 255, 255, 0); border-radius: 10px; box-shadow: 0 0 20px #a1a19f; }
+
+        .wrap .reference img.face { display: block; width: 320px; height: auto; border-radius: 10px; }
+
+        .wrap .reference img.toggle { position: absolute; right: 10px; top: 10px; width: 50px; height: 50px; }
+
+        .wrap .scan video { background-color: rgba(0, 0, 0, .8); border-radius: 10px; }
+
+        .wrap .control { justify-content: space-around; height: 456px; padding: 0 20px; }
+
+        .wrap .control p { width: 160px; height: 60px; background-color: #f9f9f9; text-align: center; line-height: 60px; color: #ffffff; font-size: 24px; border-radius: 8px; cursor: pointer; box-shadow: -8px -8px 150px -8px #b2b3b5 inset, 0 0 5px #222222; text-shadow: 0 0 1px #222222; transition: .5s; }
+
+        .wrap .control p:hover { box-shadow: -8px -8px 150px -8px #50c4f1 inset, 0 0 5px #ffffff; }
+
+        .wrap .scan { position: relative; overflow: hidden; }
+
+        .wrap .scan .strainer { position: absolute; top: 10px; width: 320px; z-index: 999; height: 3px; }
+
+        .wrap .scan .capture { width: 320px; height: 456px; }
+
+        .wrap .scan .strainer.on { background: linear-gradient(to left, transparent, #0bffb2, transparent); animation: scan 1s linear infinite; }
+
+        @keyframes scan {
+            0% { top: 10px; }
+            50% { top: 456px; }
+            100% { top: 10px; }
+        }
+
+    </style>
+    <script type="text/javascript" src="https://catsanddogs.oss-cn-beijing.aliyuncs.com/vconsole.min.js"></script>
+</head>
+<body>
+    <div class="title flex flex-column">
+</div>
+<div class="wrap flex flex-row">
+    <div class="control flex flex-column">
+        <p class="open">开启摄像头</p>
+        <p class="recognition">显示到Canvas</p>
+        <p class="close">关闭摄像头</p>
+    </div>
+    <div class="scan reference">
+        <div class="strainer"></div>
+        <video class="capture" width="320" height="456" src=""></video>
+    </div>
+
+</div>
+
+    <script type="text/javascript">
+        var buffer;
+        var oCapture = document.querySelector(".capture"),
+        open = document.querySelector(".open"),
+        recognition = document.querySelector(".recognition"),
+        close = document.querySelector(".close");
+        var control = document.querySelector(".control");
+
+        window.navigator.getUserMedia = navigator.getUserMedia || navigator.webKitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        
+        function invokingCarera(){
+            if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+                navigator.mediaDevices.getUserMedia({
+                    'audio':true,
+                    'video':{ 'facingMode': "user" }//调用前置摄像头，后置摄像头使用video: { facingMode: { exact: "environment" } }
+                })
+                .then(function(mediaStream) {console.log(555);getVideoStream(mediaStream)})
+                .catch(function(error) { console.log(666);console.log(error) })
+            }else if(navigator.getUserMedia){
+                navigator.getUserMedia({
+                    'video':true,
+                    'audio':true
+                },getVideoStream,getFail)
+            }else{
+                alert('不支持摄像头调用！')
+            }
+        }
+        //调用成功
+        function getVideoStream(stream){
+            buffer = stream;
+            if(oCapture.mozSrcObject !== undefined){
+                oCapture.mozSrcObject = buffer;
+            }else{
+                oCapture.src = window.URL && window.URL.createObjectURL(buffer);                
+            }
+            oCapture.play();
+        }
+        function getFail(){
+
+        }
+        recognition.onclick = function(){
+
+        }
+        control.addEventListener('click',function(e){
+            e = e || window.event;
+            var className = e.target.className;
+            switch(className){
+                case 'open':
+                invokingCarera();
+                break;
+                case 'close':
+                closeCamera();
+                break;
+                case 'recognition':
+                screenShot();
+                break;
+                default:
+                break;
+            }
+        })
+        function closeCamera(){
+            buffer&&buffer.getTracks()[1].stop();//关闭摄像头
+        }        
+        window.requestAnimFrame = (function(){
+          return  window.requestAnimationFrame       ||
+                  window.webkitRequestAnimationFrame ||
+                  window.mozRequestAnimationFrame    ||
+                  function( callback ){
+                    window.setTimeout(callback, 1000 / 60);
+                  };
+        })();
+        function screenShot(){
+            var canvas = document.createElement('canvas');
+            canvas.width=320,canvas.height = 456;
+            document.querySelector(".wrap").appendChild(canvas);
+            var ctx =  canvas.getContext('2d');
+            function drawVideo(){
+                ctx.drawImage(oCapture,0,0,320,456);
+                ctx.font = "30px sans-serif";
+                ctx.fillStyle = "blue";
+                ctx.fillText("请眨眼", 50, 50);
+                requestAnimationFrame(drawVideo);
+            }
+            window.requestAnimationFrame(drawVideo);
+        }
+    </script>
+</body>
+</html>
+————————————————
+版权声明：本文为CSDN博主「请输入昵称：」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/w20101310/article/details/78251938/
