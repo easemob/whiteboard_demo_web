@@ -199,9 +199,10 @@ var whiteBoards = function(options){
     this.appName = options.appKey.split("#")[1];
 
     this.dnsArr = ['https://rs.easemob.com', 'http://182.92.174.78', 'http://112.126.66.111']; 
-    this.dnsIndex = 0
-    this.restIndex = 0
-    this.restHosts = []
+    this.dnsIndex = 0;
+    this.restIndex = 0;
+    this.restHosts = [];
+    this.imToken = options.token;
 }
 
 whiteBoards.prototype.getRestFromHttpDNS = function (options) {
@@ -277,6 +278,7 @@ whiteBoards.prototype.getHttpDNS = function (options) {
 //options.suc - 成功的回调
 //options.error - 失败的回调
 whiteBoards.prototype.create = function(options){
+    this.imToken = options.token;
     if (!this.restApi) {
         var me = this
         var sucFun = function(res){
@@ -330,6 +332,8 @@ whiteBoards.prototype.create = function(options){
  * options.error - 失败的回调
 */
 whiteBoards.prototype.join = function(options){
+    console.log(555);
+    this.imToken = options.token;
     if (!this.restApi) {
         var me = this
         var sucFun = function(res){
@@ -352,13 +356,14 @@ whiteBoards.prototype.join = function(options){
 
     function _join(){
         var opts = {
-            url: this.restApi + '/' + this.orgName + '/' + this.appName + '/whiteboards/joinorcreate/byname/',
+            url: this.restApi + '/' + this.orgName + '/' + this.appName + '/whiteboards/joinorcreate/byname',
             dataType: 'json',
             type: 'POST',
             data: JSON.stringify({
                 userId: options.userName,
                 whiteBoardName: options.roomName,
-                password: options.password
+                password: options.password,
+                level:options.level || 4
             }),
             headers: {
                 'Authorization': 'Bearer ' + options.token,
@@ -380,6 +385,7 @@ whiteBoards.prototype.join = function(options){
 //options.suc - 成功的回调
 //options.error - 失败的回调
 whiteBoards.prototype.joinByRoomName= function(options){
+    this.imToken = options.token;
     if (!this.restApi) {
         var me = this
         var sucFun = function(res){
@@ -408,7 +414,8 @@ whiteBoards.prototype.joinByRoomName= function(options){
             data: JSON.stringify({
                 userId: options.userName,
                 whiteBoardName: options.roomName,
-                password: options.password
+                password: options.password,
+                level:options.level
             }),
             headers: {
                 'Authorization': 'Bearer ' + options.token,
@@ -429,6 +436,7 @@ whiteBoards.prototype.joinByRoomName= function(options){
 //options.suc - 成功的回调
 //options.error - 失败的回调
 whiteBoards.prototype.joinByRoomId= function(options){
+    this.imToken = options.token;
     if (!this.restApi) {
         var me = this
         var sucFun = function(res){
@@ -457,7 +465,8 @@ whiteBoards.prototype.joinByRoomId= function(options){
             data: JSON.stringify({
                 userId: options.userName,
                 roomId: options.roomId,
-                password: options.password
+                password: options.password,
+                level:options.level
             }),
             headers: {
                 'Authorization': 'Bearer ' + options.token,
@@ -472,7 +481,7 @@ whiteBoards.prototype.joinByRoomId= function(options){
 }
 
 //options.roomId   - 删除房间ID
-//options.token   - im的token
+//options.token   - im的token   //去掉
 //options.userName - 用户名
 //options.suc - 成功的回调
 //options.error - 失败的回调
@@ -506,7 +515,7 @@ whiteBoards.prototype.destroy= function(options){
                 userId: options.userName
             }),
             headers: {
-                'Authorization': 'Bearer ' + options.token,
+                'Authorization': 'Bearer ' + this.imToken,
                 'Content-Type': 'application/json'
             },
             success: options.suc,
@@ -516,6 +525,38 @@ whiteBoards.prototype.destroy= function(options){
         _ajax(opts); 
     }
 }
+
+//options.roomId   - 删除房间ID
+//options.userName - 用户名
+//options.members - 需要操作权限的成员列表
+//options.leval - 1、2、3无操作权限；4、5、6、7、8有操作权限
+//options.isAll - 
+//options.suc - 成功的回调
+//options.error - 失败的回调
+whiteBoards.prototype.oprateAuthority = function(options){
+    var opts = {
+        url: this.restApi + '/' + this.orgName + '/' + this.appName + '/whiteboards/' + options.roomId + '/interact',
+        dataType: 'json',
+        type: 'POST',
+        data: JSON.stringify({
+            userId: options.userName,
+            serventIds: options.members,
+            level: options.leval,
+            allServent: options.isAll == false ? false : true
+        }),
+        headers: {
+            'Authorization': 'Bearer ' + options.token,
+            'Content-Type': 'application/json'
+        },
+        success: options.suc,
+        error: options.err || function(e){
+            console.log(e)
+        }
+    }
+    _ajax(opts); 
+}
+
+
 
 
 module.exports = whiteBoards;

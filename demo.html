@@ -63,7 +63,55 @@
 		    outline: none;
 		    display: block;
 		    clear: both;
-    	}
+		}
+		.createBtnNocache{
+			margin-top: 40px;
+		    width: 100%;
+		    padding: 9px 18px;
+		    font-size: 18px;
+		    border: none;
+		    border-radius: 25px;
+		    color: #fff;
+		    background: #3194d0;
+		    cursor: pointer;
+		    outline: none;
+		    display: block;
+			clear: both;
+			display: none;
+		}
+		/* .deleteBtn{
+			text-align: right;
+			margin-top: 20px;
+		}
+		.deleteBtn input{
+			width: 80px;
+			padding: 8px;
+			background: red;
+			cursor: pointer;
+			outline: none;
+			border: none;
+			border-radius: 5px;
+			color: #fff;
+		} */
+		.oprateBtn{
+			margin-top: 20px;
+			/* display: flex; */
+			 
+		}
+		.oprateBtn input{
+			/* width: 100px; */
+			padding: 8px;
+			background: #3194d0;
+			cursor: pointer;
+			outline: none;
+			border: none;
+			border-radius: 5px;
+			color: #fff;
+		}
+		.deleteBtn{
+			background: red !important;
+			float: right;
+		}
     	.title{
     		margin: 0 auto 50px;
 		    padding: 10px;
@@ -103,32 +151,54 @@
 			<!-- <div>房间密码</div> -->
 			<input placeholder="房间密码" type="password" id="password" name="password">
 		</div>
+		<div class="formItem">
+				<!-- <div>房间密码</div> -->
+				<input placeholder="房间id" type="text" id="roomId" name="roomId">
+			</div>
 
 		<div>
 			<!-- <input class="createBtn" type="button" value="创建房间" id="create"> -->
 			<input class="createBtn" type="button" value="加入房间" id="join">
+			<input class="createBtnNocache" type="button" value="无痕加入房间" id="noCacheJoin">
 		</div>
+		<div class="oprateBtn">
+			<input type="button" value="允许互动白板" id="allow">
+			<input type="button" value="禁止互动白板" id="forbit">
+			<input class="deleteBtn" type="button" value="删除房间" id="destroy">
+			<!-- <input type="button" value="删除房间" id="destroy"> -->
+		</div>
+		<!-- <div class="deleteBtn">
+			<input type="button" value="删除房间" id="destroy">
+		</div> -->
 	</div>
 
 
-	<script type="text/javascript" src="./wbSDK.js"></script>
+	<script type="text/javascript" src="./whiteboardsSdk.js"></script>
 	<script type="text/javascript" src="./webimSDK3.0.6.js"></script>
 	<script src="./webimConfig.js"></script>
 
 	<script>
-		var createBtn = document.getElementById("create");
+		// var createBtn = document.getElementById("create");
+		var deleteBtn = document.getElementById("destroy");
+		var allowBtn = document.getElementById("allow");
+		var forbitBtn = document.getElementById("forbit");
 		var joinBtn = document.getElementById("join");
+		var noCacheJoinBtn = document.getElementById("noCacheJoin");
 		var roomName = document.getElementById("roomName");
 		var passwordObj = document.getElementById("password");
+		var roomId = document.getElementById("roomId");
 		var userName = ''
 		var token = ''
+		if(window.location.href.indexOf("easemob.com") < 0){
+			noCacheJoinBtn.style.display = "block"
+		}
 		// var WebIM = window.WebIM.default
 		console.log('Webim', WebIM)
 		WebIM.config = config;
 
 		var WDSdk = new whiteBoards({
 			// restApi: (window.location.protocol === 'https:' ? 'https:' : 'http:') + "//rtc-turn4-hsb.easemob.com",
-			restApi: (window.location.protocol === 'https:' ? 'https:' : 'http:') + '//wbrtc.easemob.com',
+			restApi: (window.location.protocol === 'https:' ? 'https:' : 'http:') + '//wbrtc-hsb.easemob.com',
 			appKey: "easemob-demo#chatdemoui"
 		});
 
@@ -138,15 +208,24 @@
 				roomName: roomName.value,
 				password: passwordObj.value,
 				token: token,   //应该为im用户登录之后的token
+				level:4,
 				suc: function(res){
 					console.log('res', res)
 					if(res.status){
-						var url = "http://172.17.1.47:1234/?" + res.whiteBoardUrl.split("?")[1];
-						// window.location = url;
-						// window.open(url);
+						if(window.location.href.indexOf("whiteboards.easemob.com/") > -1){
+							window.location = res.whiteBoardUrl;
+							// window.location = "./iframe.html"
+						}
+						else if(window.location.href.indexOf("whiteboards-hsb.easemob.com/") > -1){
+							window.open(res.whiteBoardUrl);
+						}
+						else{
+							window.open("http://172.17.3.93:1234/?" + res.whiteBoardUrl.split("?")[1]);
+							// window.location = "./iframe.html?iframe="+ "http://172.17.3.93:1234/?" + res.whiteBoardUrl.split("?")[1]
+						}
 						// localStorage.setItem('wbData', '')
 						passwordObj.value = ''
-						window.location = res.whiteBoardUrl;
+						// window.location = res.whiteBoardUrl;
 					}
 					else{
 						alert("加入失败");
@@ -160,14 +239,82 @@
 			});
 		}
 
+		noCacheJoinBtn.onclick = function(e){
+			WDSdk.join({
+				userName: userName,
+				roomName: roomName.value,
+				password: passwordObj.value,
+				token: token,   //应该为im用户登录之后的token
+				level:4,
+				suc: function(res){
+					console.log('res', res)
+					if(res.status){
+						window.open("http://whiteboards.easemob.com/index.html?" + res.whiteBoardUrl.split("?")[1]);
+						localStorage.clear();
+						passwordObj.value = '';
+						WebIM.conn.close();
+						location.reload();
+						// window.location = res.whiteBoardUrl;
+					}
+					else{
+						alert("加入失败");
+					}
+
+				},
+				error: function(err){
+					console.log('err',err)
+					alert("加入失败 "+err.error_msg);
+				}
+			});
+		}
+
+		deleteBtn.onclick = function(e){
+			WDSdk.destroy({
+				userName: userName,
+				roomId: roomId.value,
+				token: token,
+				suc: function(res){
+					console.log(res,8888);
+				}
+			})
+		}
+
+		allowBtn.onclick = function(e){
+			WDSdk.oprateAuthority({
+				userName: userName,
+				roomId: roomId.value,
+				leval: 4,
+				members:[],
+				allServent: true,
+				token: token,
+				suc: function(res){
+					console.log("权限变更-----",res)
+				}
+			})
+		}
+
+		forbitBtn.onclick = function(e){
+			WDSdk.oprateAuthority({
+				userName: userName,
+				roomId: roomId.value,
+				leval: 1,
+				members:[],
+				allServent: true,
+				token: token,
+				suc: function(res){
+					console.log("权限变更-----",res)
+				}
+			})
+		}
+
 		WebIM.conn = new WebIM.default.connection({
             appKey: "easemob-demo#chatdemoui",
             isHttpDNS: false,
             isMultiLoginSessions: false,
             host: "easemob.com",
             https: false,
-            url: 'https://im-api-v2.easemob.com/ws',
-            apiUrl: 'https://a1.easemob.com',
+            url: 'https://im-api-v2-hsb.easemob.com/ws',
+            apiUrl: 'https://a1-hsb.easemob.com',
             isAutoLogin: false,
             heartBeatWait: 3,
             autoReconnectNumMax: 10,
@@ -203,7 +350,7 @@
 
         var login = function (username, password) {
             options = {
-                apiUrl: 'https://a1.easemob.com',
+                apiUrl: 'https://a1-hsb.easemob.com',
                 user: username,
                 pwd: password,
                 appKey: "easemob-demo#chatdemoui",
@@ -231,7 +378,7 @@
 			userName = getuserName()
 			console.log('username', userName)
 			var options = {
-				apiUrl: 'https://a1.easemob.com',
+				apiUrl: 'https://a1-hsb.easemob.com',
 				username: userName,
 				password: '123456',
 				nickname: "",
