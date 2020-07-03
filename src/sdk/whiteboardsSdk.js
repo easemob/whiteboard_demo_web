@@ -370,7 +370,7 @@ whiteBoards.prototype.join = function(options){
                 'Content-Type': 'application/json'
             },
             success: options.suc,
-            error: errFun
+            error: options.err
         }
 
         _ajax(opts);
@@ -508,18 +508,18 @@ whiteBoards.prototype.destroy= function(options){
 
     function _destroy(){
         var opts = {
-            url: this.restApi + '/' + this.orgName + '/' + this.appName + '/whiteboards/' + options.roomId + '/',
+            url: this.restApi + '/' + this.orgName + '/' + this.appName + '/whiteboards/' + options.roomId,
             dataType: 'json',
             type: 'DELETE',
             data: JSON.stringify({
                 userId: options.userName
             }),
             headers: {
-                'Authorization': 'Bearer ' + this.imToken,
+                'Authorization': 'Bearer ' + options.token,
                 'Content-Type': 'application/json'
             },
             success: options.suc,
-            error: errFun
+            error: options.err
         }
 
         _ajax(opts); 
@@ -558,8 +558,10 @@ whiteBoards.prototype.oprateAuthority = function(options){
 
 
 
-
 module.exports = whiteBoards;
+// module.exports = whiteBoards;
+// export default whiteBoards;
+
 
 
 
