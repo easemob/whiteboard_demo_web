@@ -28,10 +28,11 @@ export default {
     },
     computed: {
 		getUrl(){
-            return this.$store.state.login.url
+            // return this.$store.state.login.url
+            return sessionStorage.getItem("whiteboardUrl");
         },
         getAdmin(){
-            return getParams("isCreater",this.$store.state.login.url) == "true";
+            return getParams("isCreater",sessionStorage.getItem("whiteboardUrl")) == "true";
         }
     },
     methods:{

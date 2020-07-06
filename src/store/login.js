@@ -56,8 +56,8 @@ const Login = {
                                 // window.location = "./iframe.html"
                             }
                             else{
-                                context.commit("setUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1])
-                                // sessionStorage.setItem("whiteboardUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1]);
+                                // context.commit("setUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1])
+                                sessionStorage.setItem("whiteboardUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1]);
                                 // console.log(Vue);
                                 // console.log(Router);
                                 // window.open("http://192.168.1.108:1234/?" + res.whiteBoardUrl.split("?")[1]);
