@@ -45,7 +45,7 @@ const Login = {
                     roomName: payload.roomId,
                     password: payload.roomPassword,
                     token: resToken.data.access_token,   //应该为im用户登录之后的token
-                    level:4,
+                    level:parseInt(payload.level),
                     suc: function(res){
                         if(res.status){
                             sessionStorage.setItem("username", payload.username);
@@ -53,14 +53,10 @@ const Login = {
 
                             if(window.location.href.indexOf(".easemob.com/") > -1){
                                 sessionStorage.setItem("whiteboardUrl",res.whiteBoardUrl);
-                                // window.location = "./iframe.html"
                             }
                             else{
                                 // context.commit("setUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1])
                                 sessionStorage.setItem("whiteboardUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1]);
-                                // console.log(Vue);
-                                // console.log(Router);
-                                // window.open("http://192.168.1.108:1234/?" + res.whiteBoardUrl.split("?")[1]);
                                 // window.location = "./iframe.html?iframe="+ "http://172.17.3.93:1234/?" + res.whiteBoardUrl.split("?")[1]
                             }
                             router.push("/whiteboard")
@@ -111,7 +107,7 @@ const Login = {
                 roomName: payload.roomId,
                 password: payload.roomPassword,
                 token: sessionStorage.getItem("token"),   //应该为im用户登录之后的token
-                level:4,
+                level:parseInt(payload.level),
                 suc: function(res){
                     console.log(33);
                     if(res.status){

@@ -27,15 +27,25 @@
                         />
                         </a-form-item>
                         <a-form-item>
-                        <a-input
-                            v-decorator="['roomPassword', { rules: [{ required: true, message: 'Please input your password!' }] }]"
-                            placeholder="房间密码"
-                            type="password"
-                        />
+                          <a-input
+                              v-decorator="['roomPassword', { rules: [{ required: true, message: 'Please input your password!' }] }]"
+                              placeholder="房间密码"
+                              type="password"
+                          />
+                        </a-form-item>
+                        <a-form-item>
+                          <a-radio-group v-decorator="['level',{initialValue:'4'}]">
+                            <a-radio-button value="4">
+                              允许互动
+                            </a-radio-button>
+                            <a-radio-button value="1">
+                              禁止互动
+                            </a-radio-button>
+                          </a-radio-group>
                         </a-form-item>
                         <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
                         <a-button type="primary" html-type="submit">
-                            加入房间
+                            创建/加入房间
                         </a-button>
                         </a-form-item>
                     </a-form>
@@ -55,9 +65,19 @@
                             type="password"
                         />
                         </a-form-item>
+                        <a-form-item>
+                          <a-radio-group v-decorator="['level',{initialValue:'4'}]">
+                            <a-radio-button value="4">
+                              允许互动
+                            </a-radio-button>
+                            <a-radio-button value="1">
+                              禁止互动
+                            </a-radio-button>
+                          </a-radio-group>
+                        </a-form-item>
                         <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
                         <a-button type="primary" html-type="submit" :loading="loading">
-                            加入房间
+                            创建/加入房间
                         </a-button>
                         </a-form-item>
                     </a-form>
