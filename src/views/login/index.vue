@@ -94,7 +94,8 @@ export default {
     return {
       form: this.$form.createForm(this, { name: 'imLogin' }),
       form_2: this.$form.createForm(this, { name: 'visitLogin' }),
-      defaultTab: "1",
+      defaultTab: window.location.href.indexOf("whiteboard-demo.easemob.com") > -1 ? "2" : "1",
+      // defaultTab:"2"
       // loading: true
     };
   },
@@ -104,6 +105,9 @@ export default {
 		},
   },
   mounted: function(){
+    if(window.location.href.indexOf("whiteboard-demo.easemob.com") > -1){
+      this.onVisiterRegister();
+    }
 		console.log(88);
 	},
   methods:{
