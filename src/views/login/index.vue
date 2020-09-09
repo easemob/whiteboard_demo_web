@@ -51,7 +51,7 @@
                             <a-radio-button value="1">
                               右侧
                             </a-radio-button>
-                            <a-radio-button value="1">
+                            <a-radio-button value="2">
                               顶部
                             </a-radio-button>
                           </a-radio-group>
@@ -106,7 +106,7 @@
                             <a-radio-button value="1">
                               右侧
                             </a-radio-button>
-                            <a-radio-button value="1">
+                            <a-radio-button value="2">
                               顶部
                             </a-radio-button>
                           </a-radio-group>
