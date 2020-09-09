@@ -43,6 +43,29 @@
                             </a-radio-button>
                           </a-radio-group>
                         </a-form-item>
+                        <a-form-item>
+                          <a-radio-group v-decorator="['layout',{initialValue:'0'}]">
+                            <a-radio-button value="0">
+                              底部
+                            </a-radio-button>
+                            <a-radio-button value="1">
+                              右侧
+                            </a-radio-button>
+                            <a-radio-button value="1">
+                              顶部
+                            </a-radio-button>
+                          </a-radio-group>
+                        </a-form-item>
+                        <a-form-item>
+                          <a-radio-group v-decorator="['ratio',{initialValue:'4:3'}]">
+                            <a-radio-button value="4:3">
+                              4:3
+                            </a-radio-button>
+                            <a-radio-button value="2:1">
+                              2:1
+                            </a-radio-button>
+                          </a-radio-group>
+                        </a-form-item>
                         <a-form-item :wrapper-col="{ span: 12, offset: 5 }">
                         <a-button type="primary" html-type="submit">
                             创建/加入房间
@@ -72,6 +95,29 @@
                             </a-radio-button>
                             <a-radio-button value="1">
                               禁止互动
+                            </a-radio-button>
+                          </a-radio-group>
+                        </a-form-item>
+                        <a-form-item>
+                          <a-radio-group v-decorator="['layout',{initialValue:'0'}]">
+                            <a-radio-button value="0">
+                              底部
+                            </a-radio-button>
+                            <a-radio-button value="1">
+                              右侧
+                            </a-radio-button>
+                            <a-radio-button value="1">
+                              顶部
+                            </a-radio-button>
+                          </a-radio-group>
+                        </a-form-item>
+                        <a-form-item>
+                          <a-radio-group v-decorator="['ratio',{initialValue:'4:3'}]">
+                            <a-radio-button value="4:3">
+                              4:3
+                            </a-radio-button>
+                            <a-radio-button value="2:1">
+                              2:1
                             </a-radio-button>
                           </a-radio-group>
                         </a-form-item>

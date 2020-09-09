@@ -46,19 +46,21 @@ const Login = {
                     password: payload.roomPassword,
                     token: resToken.data.access_token,   //应该为im用户登录之后的token
                     level:parseInt(payload.level),
+                    layout:parseInt(payload.layout),
+                    ratio:payload.ratio,
                     suc: function(res){
                         if(res.status){
                             sessionStorage.setItem("username", payload.username);
                             sessionStorage.setItem("token",resToken.data.access_token);
-
-                            if(window.location.href.indexOf(".easemob.com/") > -1){
-                                sessionStorage.setItem("whiteboardUrl",res.whiteBoardUrl);
-                            }
-                            else{
-                                // context.commit("setUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1])
-                                sessionStorage.setItem("whiteboardUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1]);
-                                // window.location = "./iframe.html?iframe="+ "http://172.17.3.93:1234/?" + res.whiteBoardUrl.split("?")[1]
-                            }
+                            sessionStorage.setItem("whiteboardUrl",res.whiteBoardUrl);
+                            // if(window.location.href.indexOf(".easemob.com/") > -1){
+                            //     sessionStorage.setItem("whiteboardUrl",res.whiteBoardUrl);
+                            // }
+                            // else{
+                            //     // context.commit("setUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1])
+                            //     sessionStorage.setItem("whiteboardUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1]);
+                            //     // window.location = "./iframe.html?iframe="+ "http://172.17.3.93:1234/?" + res.whiteBoardUrl.split("?")[1]
+                            // }
                             router.push("/whiteboard")
                         }
                         else{
@@ -108,15 +110,18 @@ const Login = {
                 password: payload.roomPassword,
                 token: sessionStorage.getItem("token"),   //应该为im用户登录之后的token
                 level:parseInt(payload.level),
+                layout:parseInt(payload.layout),
+                ratio:payload.ratio,
                 suc: function(res){
                     console.log(33);
                     if(res.status){
-                        if(window.location.href.indexOf(".easemob.com/") > -1){
-                            sessionStorage.setItem("whiteboardUrl",res.whiteBoardUrl);
-                        }
-                        else{
-                            sessionStorage.setItem("whiteboardUrl","http://192.168.1.108:1234/?" + res.whiteBoardUrl.split("?")[1]);
-                        }
+                        sessionStorage.setItem("whiteboardUrl",res.whiteBoardUrl);
+                        // if(window.location.href.indexOf(".easemob.com/") > -1){
+                        //     sessionStorage.setItem("whiteboardUrl",res.whiteBoardUrl);
+                        // }
+                        // else{
+                        //     sessionStorage.setItem("whiteboardUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1]);
+                        // }
                         router.push("/whiteboard")
                     }
                     else{

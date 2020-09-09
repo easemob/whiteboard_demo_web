@@ -363,7 +363,9 @@ whiteBoards.prototype.join = function(options){
                 userId: options.userName,
                 whiteBoardName: options.roomName,
                 password: options.password,
-                level:options.level || 4
+                level:options.level || 4,
+                layout:options.layout,
+                ratio:options.ratio
             }),
             headers: {
                 'Authorization': 'Bearer ' + options.token,
