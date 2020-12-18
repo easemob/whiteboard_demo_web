@@ -307,7 +307,12 @@ whiteBoards.prototype.create = function(options){
             data: JSON.stringify({
                 userId: options.userName,
                 whiteBoardName: options.roomName,
-                password: options.password
+                password: options.password,
+                level:options.level || 4,
+                layout:options.layout,
+                uplaodPattern:"CURRENT",
+                globalButton:'ALL',
+                ratio:options.ratio
             }),
             headers: {
                 'Authorization': 'Bearer ' + options.token,
@@ -327,12 +332,16 @@ whiteBoards.prototype.create = function(options){
  * options.userName   - 用户名
  * options.roomName   - 加入房间名
  * options.password -房间密码
+ * options.level  -房间权限等级
+ * options.ratio -白板画布宽高比。建议"4:3"、"2:1"
+ * options.layout -工具栏位置 默认0；0-底部，1-右侧，2-顶部
+ * options.globalButton - 所有成员功能菜单相同  ALL NO_UPLAOD;
+ * options.uplaodPattern - 上传文件的位置   TOP,BEFORE,AFTER,END
  * options.token   - im的token
  * options.suc - 成功的回调
  * options.error - 失败的回调
 */
 whiteBoards.prototype.join = function(options){
-    console.log(555);
     this.imToken = options.token;
     if (!this.restApi) {
         var me = this
@@ -365,6 +374,8 @@ whiteBoards.prototype.join = function(options){
                 password: options.password,
                 level:options.level || 4,
                 layout:options.layout,
+                uplaodPattern:"TOP",
+                globalButton:'ALL',
                 ratio:options.ratio
             }),
             headers: {
@@ -417,7 +428,6 @@ whiteBoards.prototype.joinByRoomName= function(options){
                 userId: options.userName,
                 whiteBoardName: options.roomName,
                 password: options.password,
-                level:options.level
             }),
             headers: {
                 'Authorization': 'Bearer ' + options.token,
@@ -468,7 +478,6 @@ whiteBoards.prototype.joinByRoomId= function(options){
                 userId: options.userName,
                 roomId: options.roomId,
                 password: options.password,
-                level:options.level
             }),
             headers: {
                 'Authorization': 'Bearer ' + options.token,
@@ -528,8 +537,9 @@ whiteBoards.prototype.destroy= function(options){
     }
 }
 
-//options.roomId   - 删除房间ID
+//options.roomId   - 操作房间ID
 //options.userName - 用户名
+//options.token - im token
 //options.members - 需要操作权限的成员列表
 //options.leval - 1、2、3无操作权限；4、5、6、7、8有操作权限
 //options.isAll - 

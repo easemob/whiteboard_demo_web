@@ -22,10 +22,9 @@ const WhiteboardStore = {
 				roomId: getParams("roomId",iframeUrl),
 				leval: 4,
 				members:[],
-				allServent: true,
+				isAll: true,
 				token: sessionStorage.getItem("token"),
 				suc: function(res){
-                    debugger;
 					message.success("操作成功");
                 },
                 err: function(err){
@@ -46,7 +45,7 @@ const WhiteboardStore = {
 				roomId: getParams("roomId",iframeUrl),
 				leval: 1,
 				members:[],
-				allServent: true,
+				isAll: true,
 				token: sessionStorage.getItem("token"),
 				suc: function(res){
 					message.success("操作成功");
