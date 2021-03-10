@@ -68,6 +68,7 @@ const WhiteboardStore = {
 				token: sessionStorage.getItem("token"),
 				suc: function(res){
 					message.success("删除成功");
+                    router.push("/login")
                 },
                 err: function(err){
                     message.error("删除失败");

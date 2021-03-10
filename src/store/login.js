@@ -58,7 +58,7 @@ const Login = {
                             }
                             else{
                                 // context.commit("setUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1])
-                                sessionStorage.setItem("whiteboardUrl","http://172.17.2.6:1234/?" + res.whiteBoardUrl.split("?")[1]);
+                                sessionStorage.setItem("whiteboardUrl","http://whiteboards.easemob.com/?" + res.whiteBoardUrl.split("?")[1]);
                                 // window.location = "./iframe.html?iframe="+ "http://172.17.3.93:1234/?" + res.whiteBoardUrl.split("?")[1]
                             }
                             router.push("/whiteboard")
